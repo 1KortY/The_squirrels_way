@@ -4,6 +4,35 @@ import pygame
 import random
 
 
+def start_screen():
+    intro_text = ["ЗАСТАВКА", "",
+                  "Правила игры",
+                  "Если в правилах несколько строк,",
+                  "приходится выводить их построчно"]
+    fon = load_image('blue_balloon.jpg')  # смена фона начального экрана
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.mouse or \
+                    event.type == pygame.MOUSEBUTTONDOWN:
+                return start_game()
+        pygame.display.flip()
+        clock.tick(fps)
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
@@ -38,39 +67,40 @@ def terminate():
     sys.exit()
 
 
+class Board:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.board = [[1] * width for _ in range(height)]
+
+        self.left = 20
+        self.top = 20
+        self.cell_size = 30
+
+    def set_view(self, left, top, cell_size):
+        self.left = left
+        self.top = top
+        self.cell_size = cell_size
+
+    def render(self):
+        y = self.left
+        x = self.top
+        for i in range(self.height):
+            for j in range(self.width):
+                pygame.draw.rect(screen, 'white', (x, y, self.cell_size, self.cell_size), self.board[i][j])
+                x += self.cell_size
+            x = self.top
+            y += self.cell_size
+
+
 def start_game():
     screen.fill((0, 0, 0))
-    #player, level_x, level_y = generate_level(load_level('....txt'))
-    ....render()  # рендер уровня или меню с выбором уровня(надо решить как будем делать)
-
-
-def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
-    fon = pygame.transform.scale(load_image('blue_balloon.jpg'), (width, height))  # смена фона начального экрана
-    screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 10
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
-            elif event.type == pygame.mouse or \
-                    event.type == pygame.MOUSEBUTTONDOWN:
-                return start_game()
-        pygame.display.flip()
-        clock.tick(fps)
+    player, level_x, level_y = generate_level(load_level('level_1.txt'))
+    board = Board(level_x, level_y)
+    board.set_view(0, 0, 50)
+    screen.fill((0, 0, 0))
+    board.render()
+    all_sprites.draw(screen)
 
 
 def generate_level(level):
@@ -80,7 +110,7 @@ def generate_level(level):
             if level[y][x] == '.':
                 Tile('empty', x, y)
             elif level[y][x] == '#':
-                Tile('wall', x, y)
+                Tile('meteor', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
@@ -121,13 +151,13 @@ if __name__ == '__main__':
     tiles_group = pygame.sprite.Group()
     player_group = pygame.sprite.Group()
 
-    #tile_images = {
-    #    '....': load_image('....png'),
-    #    '...': load_image('....png')
-    #}
-    #player_image = load_image('....png')
-    #
-    #tile_width = tile_height = 50
+    tile_images = {
+        'meteor': load_image('asteroid_1.jpg'),
+        'empty': load_image('blue_balloon_1.jpg')
+    }
+    player_image = load_image('player_1.jpg')
+
+    tile_width = tile_height = 50
 
     start_screen()
 
