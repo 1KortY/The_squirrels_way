@@ -9,12 +9,12 @@ def start_screen():
                   "Правила игры",
                   "Если в правилах несколько строк,",
                   "приходится выводить их построчно"]
-    fon = load_image('blue_balloon.jpg')  # смена фона начального экрана
+    fon = load_image('bg_space.jpg')  # смена фона начального экрана
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
+        string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
@@ -94,7 +94,8 @@ class Board:
 
 
 def start_game():
-    screen.fill((0, 0, 0))
+    #screen.fill((0, 0, 0))
+    screen.blit(load_image('bg_space.jpg'), (0, 0))
     player, level_x, level_y = generate_level(load_level('level_1.txt'))
     board = Board(level_x, level_y)
     board.set_view(0, 0, 50)
@@ -108,12 +109,19 @@ def generate_level(level):
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                Tile('empty', x, y)
+                pass
             elif level[y][x] == '#':
                 Tile('meteor', x, y)
             elif level[y][x] == '@':
-                Tile('empty', x, y)
+                Tile('meteor', x, y)
                 new_player = Player(x, y)
+            elif level[y][x] == '&':
+                Tile('meteor', x, y)
+                Tile('nut', x, y)
+            elif level[y][x] == '$':
+                Tile('meteor', x, y)
+                Tile('key', x, y)
+
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -152,23 +160,25 @@ if __name__ == '__main__':
     player_group = pygame.sprite.Group()
 
     tile_images = {
-        'meteor': load_image('asteroid_1.jpg'),
-        'empty': load_image('blue_balloon_1.jpg')
+        'meteor': load_image('asteroid.jpg'),
+        'empty': load_image('blue_balloon.jpg'),
+        'key': load_image('key.png'),
+        'nut': load_image('nut.jpg')
     }
-    player_image = load_image('player_1.jpg')
+    player_image = load_image('player.jpg')
 
     tile_width = tile_height = 50
 
     start_screen()
 
-    # создадим спрайт
-    balloon = pygame.sprite.Sprite(all_sprites)
-    # определим его вид
-    balloon.image = pygame.transform.scale(load_image('blue_balloon.jpg', -1), (50, 65))
-    # и размеры
-    balloon.rect = balloon.image.get_rect()
-    balloon.rect.x = 100
-    balloon.rect.y = 50
+    # # создадим спрайт
+    # balloon = pygame.sprite.Sprite(all_sprites)
+    # # определим его вид
+    # balloon.image = pygame.transform.scale(load_image('blue_balloon.jpg', -1), (50, 65))
+    # # и размеры
+    # balloon.rect = balloon.image.get_rect()
+    # balloon.rect.x = 100
+    # balloon.rect.y = 50
 
     running = True
     while running:
