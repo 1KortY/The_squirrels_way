@@ -125,6 +125,7 @@ def generate_level(level):
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
+
 class ImageButton:
     def __init__(self, x, y, width, height, text, image_path, hover_image_path=None, sound_path=None):
         self.x = x
@@ -162,6 +163,7 @@ class ImageButton:
             if self.sound:
                 self.sound.play()
             pygame.event.post(pygame.event.Event(pygame.USEREVENT, button=self))
+
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
