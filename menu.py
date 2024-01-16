@@ -40,12 +40,10 @@ def main_menu():
                 sys.exit()
 
             if event.type == pygame.USEREVENT and event.button == start_button:
-                print('кнопка "Играть" была нажата')
                 fade()
                 new_game()
 
             if event.type == pygame.USEREVENT and event.button == level_button:
-                print('кнопка "выбор уровня" была нажата')
                 fade()
                 settings_menu()
 
