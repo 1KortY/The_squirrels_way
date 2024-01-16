@@ -4,7 +4,7 @@ pygame.init()
 win = pygame.display.set_mode((1000, 1000))
 pygame.display.set_caption('game')
 
-player = pygame.image.load('data/player_1.jpg')
+player = pygame.image.load('data/player.jpg')
 bg = pygame.image.load('data/bg_space.jpg')
 
 x = 50
@@ -14,7 +14,7 @@ speed = 5
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('data/player_1.jpg')
+        self.image = pygame.image.load('data/player.jpg')
         self.rect = self.image.get_rect()
 
         self.change_x = 0

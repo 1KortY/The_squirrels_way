@@ -1,7 +1,68 @@
 import os
 import sys
 import pygame
-import random
+
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, tile_type, pos_x, pos_y):
+        super().__init__(tiles_group, all_sprites)
+        self.image = tile_images[tile_type]
+        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(player_group, all_sprites)
+        self.x = pos_x
+        self.y = pos_y
+        self.image = player_image
+        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))
+
+    def move_up(self):
+        if can_move(self.x, self.y - 1):
+            print('up')
+            x, y = tile * self.x, tile * ((self.y - 1) * 0.57)
+            self.y -= 1
+            screen.blit(self.image, (x, y))
+            self.rect = self.rect.move(0, -tile * 0.57)
+
+    def move_down(self):
+        if can_move(self.x, self.y + 1):
+            print('down')
+            x, y = tile * self.x, tile * ((self.y + 1) * 0.57)
+            self.y += 1
+            screen.blit(self.image, (x, y))
+            self.rect = self.rect.move(0, tile * 0.57)
+
+    def move_right(self):
+        if can_move(self.x + 1, self.y):
+            print('right')
+            x, y = tile * (self.x + 1), tile * (self.y * 0.57)
+            self.x += 1
+            screen.blit(self.image, (x, y))
+            self.rect = self.rect.move(tile, 0)
+
+    def move_left(self):
+        if can_move(self.x - 1, self.y):
+            print('left')
+            x, y = tile * (self.x - 1), tile * (self.y * 0.57)
+            self.x -= 1
+            screen.blit(self.image, (x, y))
+            self.rect = self.rect.move(-tile, 0)
+
+
+def can_move(x, y):
+    print(load_level('level_1.txt')[y][x])
+    if load_level('level_1.txt')[y][x] == '#' or \
+            load_level('level_1.txt')[y][x] == '&' or \
+            load_level('level_1.txt')[y][x] == '$' or \
+            load_level('level_1.txt')[y][x] == '@':
+        return True
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
 
 
 def start_screen():
@@ -10,7 +71,7 @@ def start_screen():
                   "Если в правилах несколько строк,",
                   "приходится выводить их построчно"]
     fon = load_image('bg_space.jpg')  # смена фона начального экрана
-    screen.blit(fon, (0, 0))
+    screen.blit(fon, (0, -12))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     for line in intro_text:
@@ -62,45 +123,12 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 
-def terminate():
-    pygame.quit()
-    sys.exit()
-
-
-class Board:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.board = [[1] * width for _ in range(height)]
-
-        self.left = 20
-        self.top = 20
-        self.cell_size = 30
-
-    def set_view(self, left, top, cell_size):
-        self.left = left
-        self.top = top
-        self.cell_size = cell_size
-
-    def render(self):
-        y = self.left
-        x = self.top
-        for i in range(self.height):
-            for j in range(self.width):
-                pygame.draw.rect(screen, 'white', (x, y, self.cell_size, self.cell_size), self.board[i][j])
-                x += self.cell_size
-            x = self.top
-            y += self.cell_size
-
-
 def start_game():
-    #screen.fill((0, 0, 0))
-    screen.blit(load_image('bg_space.jpg'), (0, 0))
-    player, level_x, level_y = generate_level(load_level('level_1.txt'))
-    board = Board(level_x, level_y)
-    board.set_view(0, 0, 50)
-    screen.fill((0, 0, 0))
-    board.render()
+    screen.blit(load_image('bg_space.jpg'), (0, -12))
+    generate_level(load_level('level_1.txt'))
+    # board = Board(screen, level_x, level_y)
+    # board.set_view(0, 0, 50)
+    # board.render()
     all_sprites.draw(screen)
 
 
@@ -124,61 +152,6 @@ def generate_level(level):
 
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
-
-
-class ImageButton:
-    def __init__(self, x, y, width, height, text, image_path, hover_image_path=None, sound_path=None):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.text = text
-
-        self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (width, height))
-        self.hover_image = self.image
-        if hover_image_path:
-            self.hover_image = pygame.image.load(hover_image_path)
-            self.hover_image = pygame.transform.scale(self.hover_image, (width, height))
-        self.rect = self.image.get_rect(topleft=(x, y))
-        self.sound = None
-        if sound_path:
-            self.sound = pygame.mixer.Sound(sound_path)
-        self.is_hovered = False
-
-    def draw(self, screen):
-        current_image = self.hover_image if self.is_hovered else self.image
-        screen.blit(current_image, self.rect.topleft)
-
-        font = pygame.font.Font(None, 36)
-        text_surface = font.render(self.text, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        screen.blit(text_surface, text_rect)
-
-    def check_hover(self, mouse_pos):
-        self.is_hovered = self.rect.collidepoint(mouse_pos)
-
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.is_hovered:
-            if self.sound:
-                self.sound.play()
-            pygame.event.post(pygame.event.Event(pygame.USEREVENT, button=self))
-
-
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
-        super().__init__(tiles_group, all_sprites)
-        self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x, tile_height * pos_y)
-
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(player_group, all_sprites)
-        self.image = player_image
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x + 15, tile_height * pos_y + 5)
 
 
 if __name__ == '__main__':
@@ -206,28 +179,37 @@ if __name__ == '__main__':
     }
     player_image = load_image('player.jpg')
 
-    tile_width = tile_height = 50
+    tile = 50
 
     start_screen()
 
-    # # создадим спрайт
-    # balloon = pygame.sprite.Sprite(all_sprites)
-    # # определим его вид
-    # balloon.image = pygame.transform.scale(load_image('blue_balloon.jpg', -1), (50, 65))
-    # # и размеры
-    # balloon.rect = balloon.image.get_rect()
-    # balloon.rect.x = 100
-    # balloon.rect.y = 50
+    player, level_x, level_y = generate_level(load_level('level_1.txt'))
 
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w or event.key == pygame.K_UP:
+                    player.move_up()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                    player.move_left()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                    player.move_down()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    player.move_right()
+
+        screen.blit(load_image('bg_space.jpg'), (0, -12))
+        tiles_group.draw(screen)
+        player_group.draw(screen)
 
         # обработка остальных событий
 
-        # all_sprites.draw(screen)
+        #all_sprites.draw(screen)
 
         # формирование кадра
         # ...
