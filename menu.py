@@ -4,7 +4,7 @@ from button import ImageButton
 
 pygame.init()
 
-WIDTH, HEIGHT = 960, 600
+WIDTH, HEIGHT = 1800, 720
 MAX_FPS = 60;
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -123,7 +123,7 @@ def new_game():
 
         font = pygame.font.Font(None, 72)
         text_surface = font.render("Первый уровень", True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(WIDTH / 2, HEIGHT / 2))
+        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))
         screen.blit(text_surface, text_rect)
 
         for event in pygame.event.get():
