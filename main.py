@@ -84,11 +84,11 @@ def terminate():
 
 
 def start_screen():
-    start_button = ImageButton(width / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',
+    start_button = ImageButton(width / 2 - (252 / 2), 200, 252, 74, 'Играть', 'data/button.png',
                                'data/button_hover.png', 'data/click.mp3')
-    level_button = ImageButton(width / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',
+    level_button = ImageButton(width / 2 - (252 / 2), 300, 252, 74, 'Выбрать уровень', 'data/button.png',
                                'data/button_hover.png', 'data/click.mp3')
-    exit_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',
+    exit_button = ImageButton(width / 2 - (252 / 2), 400, 252, 74, 'Выйти', 'data/button.png',
                               'data/button_hover.png', 'data/click.mp3')
 
     running = True
@@ -98,6 +98,29 @@ def start_screen():
         font = pygame.font.Font(None, 72)
         text_surface = font.render("The squirrel's way", True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=(width / 2, 100))
+        screen.blit(text_surface, text_rect)
+
+        font = pygame.font.Font(None, 40)
+        text_surface = font.render("Благодаря ореху белка может выжить в космосе,", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(width / 2, 550))
+        screen.blit(text_surface, text_rect)
+
+        font = pygame.font.Font(None, 40)
+        text_surface = font.render("поэтому задача взять орех.", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(width / 2, 600))
+        screen.blit(text_surface, text_rect)
+
+        font = pygame.font.Font(None, 20)
+        text_surface = font.render("Все события в данной игре вымышленные,", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(920, 680))
+        screen.blit(text_surface, text_rect)
+
+        font = pygame.font.Font(None, 20)
+        text_surface = font.render("сходство с реальными событиями случайно", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(920, 700))
         screen.blit(text_surface, text_rect)
 
         for event in pygame.event.get():
