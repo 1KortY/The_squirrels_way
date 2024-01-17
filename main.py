@@ -70,11 +70,13 @@ class Player(pygame.sprite.Sprite):
 
 
 def can_move(x, y):
-    print(load_level('level_1.txt')[y][x])
-    if load_level('level_1.txt')[y][x] == '#' or \
-            load_level('level_1.txt')[y][x] == '&' or \
-            load_level('level_1.txt')[y][x] == '$' or \
-            load_level('level_1.txt')[y][x] == '@':
+    print(x, y)
+    print(load_level(f'level_{cur_lvl}.txt')[y][x])
+    if load_level(f'level_{cur_lvl}.txt')[y][x] == '#' or \
+            load_level(f'level_{cur_lvl}.txt')[y][x] == '&' or \
+            load_level(f'level_{cur_lvl}.txt')[y][x] == '$' or \
+            load_level(f'level_{cur_lvl}.txt')[y][x] == '@' or \
+            load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
         return True
 
 
@@ -192,9 +194,17 @@ def generate_level(level):
             elif level[y][x] == '$':
                 Tile('meteor', x, y)
                 Tile('key', x, y)
+            elif level[y][x] == '%':
+                Tile('meteor', x, y)
+                pass
 
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
+
+
+def return_player():
+    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))
+    return player
 
 
 if __name__ == '__main__':
@@ -203,7 +213,7 @@ if __name__ == '__main__':
     size = width, height = 1080, 720
     screen = pygame.display.set_mode(size)
 
-    fps = 60  # количество кадров в секунду
+    fps = 120  # количество кадров в секунду
     clock = pygame.time.Clock()
 
     # группы спрайтов
@@ -222,14 +232,15 @@ if __name__ == '__main__':
 
     tile = 50
 
-    cur_lvl = 1
+    cur_lvl = 2
+
+    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))
 
     start_screen()
 
-    player, level_x, level_y = generate_level(load_level('level_1.txt'))
-
     running = True
     while running:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False

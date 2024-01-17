@@ -1,0 +1,84 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport sys\r\nimport pygame\r\nimport menu\r\nfrom button import ImageButton\r\n\r\n\r\ndef load_image(name, colorkey=None):\r\n    fullname = os.path.join('data', name)\r\n    if not os.path.isfile(fullname):\r\n        print(f\"Файл с изображением '{fullname}' не найден\")\r\n        sys.exit()\r\n    image = pygame.image.load(fullname)\r\n    if colorkey is not None:\r\n        image = image.convert()\r\n        if colorkey == -1:\r\n            colorkey = image.get_at((0, 0))\r\n        image.set_colorkey(colorkey)\r\n    else:\r\n        image = image.convert_alpha()\r\n    return image\r\n\r\n\r\nclass Tile(pygame.sprite.Sprite):\r\n    def __init__(self, tile_type, pos_x, pos_y):\r\n        super().__init__(tiles_group, all_sprites)\r\n        self.image = tile_images[tile_type]\r\n        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))\r\n\r\n\r\nclass Player(pygame.sprite.Sprite):\r\n    def __init__(self, pos_x, pos_y):\r\n        super().__init__(player_group, all_sprites)\r\n        self.x = pos_x\r\n        self.y = pos_y\r\n        self.image = player_image\r\n        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))\r\n\r\n    def move_up(self):\r\n        if can_move(self.x, self.y - 1):\r\n            print('up')\r\n            x, y = tile * self.x, tile * ((self.y - 1) * 0.57)\r\n            self.y -= 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(0, -tile * 0.57)\r\n\r\n    def move_down(self):\r\n        if can_move(self.x, self.y + 1):\r\n            print('down')\r\n            x, y = tile * self.x, tile * ((self.y + 1) * 0.57)\r\n            self.y += 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(0, tile * 0.57)\r\n\r\n    def move_right(self):\r\n        if can_move(self.x + 1, self.y):\r\n            print('right')\r\n            x, y = tile * (self.x + 1), tile * (self.y * 0.57)\r\n            self.x += 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(tile, 0)\r\n\r\n    def move_left(self):\r\n        if can_move(self.x - 1, self.y):\r\n            print('left')\r\n            x, y = tile * (self.x - 1), tile * (self.y * 0.57)\r\n            self.x -= 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(-tile, 0)\r\n\r\n\r\ndef can_move(x, y):\r\n    print(load_level('level_1.txt')[y][x])\r\n    if load_level('level_1.txt')[y][x] == '#' or \\\r\n            load_level('level_1.txt')[y][x] == '&' or \\\r\n            load_level('level_1.txt')[y][x] == '$' or \\\r\n            load_level('level_1.txt')[y][x] == '@':\r\n        return True\r\n\r\n\r\ndef terminate():\r\n    pygame.quit()\r\n    sys.exit()\r\n\r\n\r\ndef start_screen():\r\n    start_button = ImageButton(width / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    level_button = ImageButton(width / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    exit_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',\r\n                              'data/button_hover.png', 'data/click.mp3')\r\n\r\n    running = True\r\n    while running:\r\n        screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n\r\n        font = pygame.font.Font(None, 72)\r\n        text_surface = font.render(\"The squirrel's way\", True, (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(width / 2, 100))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                terminate()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == start_button:\r\n                menu.fade()\r\n                return start_game()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == level_button:\r\n                menu.fade()\r\n                menu.level_menu()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == exit_button:\r\n                running = False\r\n                terminate()\r\n\r\n            for btn in [start_button, level_button, exit_button]:\r\n                btn.handle_event(event)\r\n\r\n        for btn in [start_button, level_button, exit_button]:\r\n            btn.check_hover(pygame.mouse.get_pos())\r\n            btn.draw(screen)\r\n\r\n        x, y = pygame.mouse.get_pos()\r\n        screen.blit(cursor, (x - 2, y - 2))\r\n\r\n        pygame.display.flip()\r\n\r\n\r\ndef load_level(filename):\r\n    filename = \"data/\" + filename\r\n    # читаем уровень, убирая символы перевода строки\r\n    with open(filename, 'r') as mapFile:\r\n        level_map = [line.strip() for line in mapFile]\r\n\r\n    # и подсчитываем максимальную длину\r\n    max_width = max(map(len, level_map))\r\n\r\n    # дополняем каждую строку пустыми клетками ('.')\r\n    return list(map(lambda x: x.ljust(max_width, '.'), level_map))\r\n\r\n\r\ndef start_game():\r\n    screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n    generate_level(load_level(f'level_{cur_lvl}.txt'))\r\n    # board = Board(screen, level_x, level_y)\r\n    # board.set_view(0, 0, 50)\r\n    # board.render()\r\n    all_sprites.draw(screen)\r\n\r\n\r\ndef generate_level(level):\r\n    new_player, x, y = None, None, None\r\n    for y in range(len(level)):\r\n        for x in range(len(level[y])):\r\n            if level[y][x] == '.':\r\n                pass\r\n            elif level[y][x] == '#':\r\n                Tile('meteor', x, y)\r\n            elif level[y][x] == '@':\r\n                Tile('meteor', x, y)\r\n                new_player = Player(x, y)\r\n            elif level[y][x] == '&':\r\n                Tile('meteor', x, y)\r\n                Tile('nut', x, y)\r\n            elif level[y][x] == '$':\r\n                Tile('meteor', x, y)\r\n                Tile('key', x, y)\r\n\r\n    # вернем игрока, а также размер поля в клетках\r\n    return new_player, x, y\r\n\r\n\r\nif __name__ == '__main__':\r\n    pygame.init()\r\n    pygame.display.set_caption(\"The squirrel's way\")\r\n    size = width, height = 1080, 720\r\n    screen = pygame.display.set_mode(size)\r\n\r\n    fps = 60  # количество кадров в секунду\r\n    clock = pygame.time.Clock()\r\n\r\n    # группы спрайтов\r\n    all_sprites = pygame.sprite.Group()\r\n    tiles_group = pygame.sprite.Group()\r\n    player_group = pygame.sprite.Group()\r\n\r\n    tile_images = {\r\n        'meteor': load_image('asteroid.jpg'),\r\n        'empty': load_image('blue_balloon.jpg'),\r\n        'key': load_image('key.png'),\r\n        'nut': load_image('nut.jpg')\r\n    }\r\n    player_image = load_image('player.jpg')\r\n    cursor = load_image('cursor.png')\r\n\r\n    tile = 50\r\n\r\n    cur_lvl = 1\r\n\r\n    start_screen()\r\n\r\n    player, level_x, level_y = generate_level(load_level('level_1.txt'))\r\n\r\n    running = True\r\n    while running:\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                terminate()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_w or event.key == pygame.K_UP:\r\n                    player.move_up()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_a or event.key == pygame.K_LEFT:\r\n                    player.move_left()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_s or event.key == pygame.K_DOWN:\r\n                    player.move_down()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:\r\n                    player.move_right()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_ESCAPE:\r\n                    menu.fade()\r\n                    start_screen()\r\n\r\n        screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n        tiles_group.draw(screen)\r\n        player_group.draw(screen)\r\n\r\n        pygame.display.flip()\r\n        # изменение игрового мира\r\n        # ...\r\n        # временная задержка\r\n        clock.tick(fps)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 7d148e24328278685f8e7b644c3ed4e52774f06c)
++++ b/main.py	(date 1705520235917)
+@@ -70,11 +70,13 @@
+ 
+ 
+ def can_move(x, y):
+-    print(load_level('level_1.txt')[y][x])
+-    if load_level('level_1.txt')[y][x] == '#' or \
+-            load_level('level_1.txt')[y][x] == '&' or \
+-            load_level('level_1.txt')[y][x] == '$' or \
+-            load_level('level_1.txt')[y][x] == '@':
++    print(x, y)
++    print(load_level(f'level_{cur_lvl}.txt')[y][x])
++    if load_level(f'level_{cur_lvl}.txt')[y][x] == '#' or \
++            load_level(f'level_{cur_lvl}.txt')[y][x] == '&' or \
++            load_level(f'level_{cur_lvl}.txt')[y][x] == '$' or \
++            load_level(f'level_{cur_lvl}.txt')[y][x] == '@' or \
++            load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
+         return True
+ 
+ 
+@@ -169,11 +171,19 @@
+             elif level[y][x] == '$':
+                 Tile('meteor', x, y)
+                 Tile('key', x, y)
++            elif level[y][x] == '%':
++                Tile('meteor', x, y)
++                pass
+ 
+     # вернем игрока, а также размер поля в клетках
+     return new_player, x, y
+ 
+ 
++def return_player():
++    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))
++    return player
++
++
+ if __name__ == '__main__':
+     pygame.init()
+     pygame.display.set_caption("The squirrel's way")
+@@ -199,14 +209,13 @@
+ 
+     tile = 50
+ 
+-    cur_lvl = 1
++    cur_lvl = 2
+ 
+     start_screen()
+ 
+-    player, level_x, level_y = generate_level(load_level('level_1.txt'))
+-
+     running = True
+     while running:
++
+         for event in pygame.event.get():
+             if event.type == pygame.QUIT:
+                 running = False
+Index: data/level_1.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.............\r\n.............\r\n..#..##..#...\r\n..@#####.##$.\r\n....#.#.##...\r\n......###....\r\n....&##......\r\n.............
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/data/level_1.txt b/data/level_1.txt
+--- a/data/level_1.txt	(revision 7d148e24328278685f8e7b644c3ed4e52774f06c)
++++ b/data/level_1.txt	(date 1705517542841)
+@@ -4,5 +4,5 @@
+ ..@#####.##$.
+ ....#.#.##...
+ ......###....
+-....&##......
++....&%#......
+ .............
+\ No newline at end of file
