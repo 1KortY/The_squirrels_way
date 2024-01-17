@@ -1,14 +1,14 @@
 import pygame
 import sys
+import main
 from button import ImageButton
 
 pygame.init()
 
-WIDTH, HEIGHT = 1800, 720
-MAX_FPS = 60;
+size = WIDTH, HEIGHT = 1080, 720
+screen = pygame.display.set_mode(size)
+MAX_FPS = 60
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Menu')
 main_background = pygame.image.load('data/bg_space.jpg')
 clock = pygame.time.Clock()
 cursor = pygame.image.load('data/cursor.png')
@@ -25,7 +25,6 @@ def main_menu():
 
     running = True
     while running:
-        screen.fill((0, 0, 0))
         screen.blit(main_background, (0, -300))
 
         font = pygame.font.Font(None, 72)
@@ -41,11 +40,11 @@ def main_menu():
 
             if event.type == pygame.USEREVENT and event.button == start_button:
                 fade()
-                new_game()
+                main.start_game()
 
             if event.type == pygame.USEREVENT and event.button == level_button:
                 fade()
-                settings_menu()
+                level_menu()
 
             if event.type == pygame.USEREVENT and event.button == exit_button:
                 running = False
@@ -65,64 +64,20 @@ def main_menu():
         pygame.display.flip()
 
 
-def settings_menu():
+def level_menu():
     level1_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Уровень 1', 'data/button.png',
                                'data/button_hover.png', 'data/click.mp3')
     level2_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Уровень 2', 'data/button.png',
                                'data/button_hover.png', 'data/click.mp3')
-    level3_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',
-                              'data/button_hover.png', 'data/click.mp3')
-
-    running = True
-    while running:
-        screen.fill((0, 0, 0))
-        screen.blit(main_background, (0, 0))
-
-        font = pygame.font.Font(None, 72)
-        text_surface = font.render("ВЫБОР УРОВНЯ", True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))
-        screen.blit(text_surface, text_rect)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    fade()
-                    running = False
-
-            if event.type == pygame.USEREVENT and event.button == level3_button:
-                fade()
-                running = False
-
-            for btn in [level1_button, level2_button, level3_button]:
-                btn.handle_event(event)
-
-        for btn in [level1_button, level2_button, level3_button]:
-            btn.check_hover(pygame.mouse.get_pos())
-            btn.draw(screen)
-
-        x, y = pygame.mouse.get_pos()
-        screen.blit(cursor, (x - 2, y - 2))
-
-        pygame.display.flip()
-
-
-def new_game():
     back_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',
                               'data/button_hover.png', 'data/click.mp3')
 
     running = True
     while running:
-        screen.fill((0, 0, 0))
-
-        screen.blit(main_background, (0, -10))
+        screen.blit(main_background, (0, -12))
 
         font = pygame.font.Font(None, 72)
-        text_surface = font.render("Первый уровень", True, (255, 255, 255))
+        text_surface = font.render("Выберите уровень", True, (255, 255, 255))
         text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))
         screen.blit(text_surface, text_rect)
 
@@ -141,10 +96,10 @@ def new_game():
                 fade()
                 running = False
 
-            for btn in [back_button]:
+            for btn in [level1_button, level2_button, back_button]:
                 btn.handle_event(event)
 
-        for btn in [back_button]:
+        for btn in [level1_button, level2_button, back_button]:
             btn.check_hover(pygame.mouse.get_pos())
             btn.draw(screen)
 

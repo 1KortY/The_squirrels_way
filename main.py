@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import menu
 
 
 class Tile(pygame.sprite.Sprite):
@@ -66,23 +67,8 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
-    fon = load_image('bg_space.jpg')  # смена фона начального экрана
-    screen.blit(fon, (0, -12))
-    font = pygame.font.Font(None, 30)
-    text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 10
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
-
+    screen.blit(load_image('bg_space.jpg'), (0, -12))
+    menu.main_menu()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -156,11 +142,11 @@ def generate_level(level):
 
 if __name__ == '__main__':
     pygame.init()
-    pygame.display.set_caption('Название окна')
+    pygame.display.set_caption("The squirrel's way")
     size = width, height = 1080, 720
     screen = pygame.display.set_mode(size)
 
-    fps = 120  # количество кадров в секунду
+    fps = 60  # количество кадров в секунду
     clock = pygame.time.Clock()
 
     # основной персонаж
