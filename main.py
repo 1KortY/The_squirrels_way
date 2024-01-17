@@ -223,6 +223,10 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                     player.move_right()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    menu.fade()
+                    start_screen()
 
         screen.blit(load_image('bg_space.jpg'), (0, -12))
         tiles_group.draw(screen)
