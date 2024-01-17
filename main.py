@@ -257,6 +257,6 @@ if __name__ == '__main__':
 
         pygame.display.flip()
         # изменение игрового мира
-        # ...
+        # ..
         # временная задержка
         clock.tick(fps)
