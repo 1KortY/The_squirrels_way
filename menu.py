@@ -19,9 +19,9 @@ def main_menu():
     start_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',
                                'data/button_hover.png', 'data/click.mp3')
     level_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',
-                                  'data/button_hover.png', 'data/click.mp3')
+                               'data/button_hover.png', 'data/click.mp3')
     exit_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',
-                              'data/button_hover.png', 'data/click.mp3')
+                               'data/button_hover.png', 'data/click.mp3')
 
     running = True
     while running:
@@ -40,7 +40,7 @@ def main_menu():
 
             if event.type == pygame.USEREVENT and event.button == start_button:
                 fade()
-                main.start_game()
+                return main.start_game()
 
             if event.type == pygame.USEREVENT and event.button == level_button:
                 fade()

@@ -2,6 +2,23 @@ import os
 import sys
 import pygame
 import menu
+from button import ImageButton
+
+
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    if colorkey is not None:
+        image = image.convert()
+        if colorkey == -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
 class Tile(pygame.sprite.Sprite):
@@ -67,33 +84,50 @@ def terminate():
 
 
 def start_screen():
-    screen.blit(load_image('bg_space.jpg'), (0, -12))
-    menu.main_menu()
-    while True:
+    start_button = ImageButton(width / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',
+                               'data/button_hover.png', 'data/click.mp3')
+    level_button = ImageButton(width / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',
+                               'data/button_hover.png', 'data/click.mp3')
+    exit_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',
+                              'data/button_hover.png', 'data/click.mp3')
+
+    running = True
+    while running:
+        screen.blit(load_image('bg_space.jpg'), (0, -12))
+
+        font = pygame.font.Font(None, 72)
+        text_surface = font.render("The squirrel's way", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(width / 2, 100))
+        screen.blit(text_surface, text_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                running = False
                 terminate()
-            elif event.type == pygame.mouse or \
-                    event.type == pygame.MOUSEBUTTONDOWN:
+
+            if event.type == pygame.USEREVENT and event.button == start_button:
+                menu.fade()
                 return start_game()
+
+            if event.type == pygame.USEREVENT and event.button == level_button:
+                menu.fade()
+                menu.level_menu()
+
+            if event.type == pygame.USEREVENT and event.button == exit_button:
+                running = False
+                terminate()
+
+            for btn in [start_button, level_button, exit_button]:
+                btn.handle_event(event)
+
+        for btn in [start_button, level_button, exit_button]:
+            btn.check_hover(pygame.mouse.get_pos())
+            btn.draw(screen)
+
+        x, y = pygame.mouse.get_pos()
+        screen.blit(cursor, (x - 2, y - 2))
+
         pygame.display.flip()
-        clock.tick(fps)
-
-
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image
 
 
 def load_level(filename):
@@ -111,7 +145,7 @@ def load_level(filename):
 
 def start_game():
     screen.blit(load_image('bg_space.jpg'), (0, -12))
-    generate_level(load_level('level_1.txt'))
+    generate_level(load_level(f'level_{cur_lvl}.txt'))
     # board = Board(screen, level_x, level_y)
     # board.set_view(0, 0, 50)
     # board.render()
@@ -149,9 +183,6 @@ if __name__ == '__main__':
     fps = 60  # количество кадров в секунду
     clock = pygame.time.Clock()
 
-    # основной персонаж
-    player = None
-
     # группы спрайтов
     all_sprites = pygame.sprite.Group()
     tiles_group = pygame.sprite.Group()
@@ -164,8 +195,11 @@ if __name__ == '__main__':
         'nut': load_image('nut.jpg')
     }
     player_image = load_image('player.jpg')
+    cursor = load_image('cursor.png')
 
     tile = 50
+
+    cur_lvl = 1
 
     start_screen()
 
@@ -176,6 +210,7 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                terminate()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w or event.key == pygame.K_UP:
                     player.move_up()
@@ -193,13 +228,7 @@ if __name__ == '__main__':
         tiles_group.draw(screen)
         player_group.draw(screen)
 
-        # обработка остальных событий
-
-        #all_sprites.draw(screen)
-
-        # формирование кадра
-        # ...
-        pygame.display.flip()  # смена кадра
+        pygame.display.flip()
         # изменение игрового мира
         # ...
         # временная задержка
