@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7faef6e7-cd11-4e6f-9a85-a028f1487ff3" name="Changes" comment="новая функция">
-      <change beforePath="$PROJECT_DIR$/data/asteroid.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/asteroid_.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/asteroid_.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blue_balloon.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/click.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/key.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/key.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/nut.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/player.jpg" beforeDir="false" />
-    </list>
+    <list default="true" id="7faef6e7-cd11-4e6f-9a85-a028f1487ff3" name="Changes" comment="картинки" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +86,23 @@
       <option name="project" value="LOCAL" />
       <updated>1705602089528</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="новая функция">
+      <option name="closed" value="true" />
+      <created>1705602866849</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705602866849</updated>
+    </task>
+    <task id="LOCAL-00008" summary="картинки">
+      <option name="closed" value="true" />
+      <created>1705602903342</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705602903342</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -104,6 +111,7 @@
     <MESSAGE value="1" />
     <MESSAGE value="работает" />
     <MESSAGE value="новая функция" />
-    <option name="LAST_COMMIT_MESSAGE" value="новая функция" />
+    <MESSAGE value="картинки" />
+    <option name="LAST_COMMIT_MESSAGE" value="картинки" />
   </component>
 </project>
