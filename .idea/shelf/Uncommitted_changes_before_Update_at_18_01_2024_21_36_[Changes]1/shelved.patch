@@ -1,0 +1,503 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport sys\r\nimport pygame\r\nimport menu\r\nfrom button import ImageButton\r\n\r\n\r\ndef load_image(name, colorkey=None):\r\n    fullname = os.path.join('data', name)\r\n    if not os.path.isfile(fullname):\r\n        print(f\"Файл с изображением '{fullname}' не найден\")\r\n        sys.exit()\r\n    image = pygame.image.load(fullname)\r\n    if colorkey is not None:\r\n        image = image.convert()\r\n        if colorkey == -1:\r\n            colorkey = image.get_at((0, 0))\r\n        image.set_colorkey(colorkey)\r\n    else:\r\n        image = image.convert_alpha()\r\n    return image\r\n\r\n\r\nclass Tile(pygame.sprite.Sprite):\r\n    def __init__(self, tile_type, pos_x, pos_y):\r\n        super().__init__(tiles_group, all_sprites)\r\n        self.image = tile_images[tile_type]\r\n        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))\r\n\r\n\r\nclass Player(pygame.sprite.Sprite):\r\n    def __init__(self, pos_x, pos_y):\r\n        super().__init__(player_group, all_sprites)\r\n        self.x = pos_x\r\n        self.y = pos_y\r\n        self.image = player_image\r\n        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))\r\n\r\n    def move_up(self):\r\n        if can_move(self.x, self.y - 1):\r\n            print('up')\r\n            x, y = tile * self.x, tile * ((self.y - 1) * 0.57)\r\n            self.y -= 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(0, -tile * 0.57)\r\n\r\n    def move_down(self):\r\n        if can_move(self.x, self.y + 1):\r\n            print('down')\r\n            x, y = tile * self.x, tile * ((self.y + 1) * 0.57)\r\n            self.y += 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(0, tile * 0.57)\r\n\r\n    def move_right(self):\r\n        if can_move(self.x + 1, self.y):\r\n            print('right')\r\n            x, y = tile * (self.x + 1), tile * (self.y * 0.57)\r\n            self.x += 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(tile, 0)\r\n\r\n    def move_left(self):\r\n        if can_move(self.x - 1, self.y):\r\n            print('left')\r\n            x, y = tile * (self.x - 1), tile * (self.y * 0.57)\r\n            self.x -= 1\r\n            screen.blit(self.image, (x, y))\r\n            self.rect = self.rect.move(-tile, 0)\r\n\r\n\r\ndef can_move(x, y):\r\n    print(x, y)\r\n    print(load_level(f'level_{cur_lvl}.txt')[y][x])\r\n    if load_level(f'level_{cur_lvl}.txt')[y][x] == '#' or \\\r\n            load_level(f'level_{cur_lvl}.txt')[y][x] == '&' or \\\r\n            load_level(f'level_{cur_lvl}.txt')[y][x] == '$' or \\\r\n            load_level(f'level_{cur_lvl}.txt')[y][x] == '@' or \\\r\n            load_level(f'level_{cur_lvl}.txt')[y][x] == '%':\r\n        return True\r\n\r\n\r\ndef terminate():\r\n    pygame.quit()\r\n    sys.exit()\r\n\r\n\r\ndef start_screen():\r\n    start_button = ImageButton(width / 2 - (252 / 2), 200, 252, 74, 'Играть', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    level_button = ImageButton(width / 2 - (252 / 2), 300, 252, 74, 'Выбрать уровень', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    exit_button = ImageButton(width / 2 - (252 / 2), 400, 252, 74, 'Выйти', 'data/button.png',\r\n                              'data/button_hover.png', 'data/click.mp3')\r\n\r\n    running = True\r\n    while running:\r\n        screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n\r\n        font = pygame.font.Font(None, 72)\r\n        text_surface = font.render(\"The squirrel's way\", True, (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(width / 2, 100))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        font = pygame.font.Font(None, 40)\r\n        text_surface = font.render(\"Благодаря ореху белка может выжить в космосе,\", True, (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(width / 2, 550))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        font = pygame.font.Font(None, 40)\r\n        text_surface = font.render(\"поэтому задача взять орех.\", True,\r\n                                   (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(width / 2, 600))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        font = pygame.font.Font(None, 20)\r\n        text_surface = font.render(\"Все события в данной игре вымышленные,\", True,\r\n                                   (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(920, 680))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        font = pygame.font.Font(None, 20)\r\n        text_surface = font.render(\"сходство с реальными событиями случайно\", True,\r\n                                   (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(920, 700))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                terminate()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == start_button:\r\n                menu.fade()\r\n                return start_game()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == level_button:\r\n                menu.fade()\r\n                menu.level_menu()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == exit_button:\r\n                running = False\r\n                terminate()\r\n\r\n            for btn in [start_button, level_button, exit_button]:\r\n                btn.handle_event(event)\r\n\r\n        for btn in [start_button, level_button, exit_button]:\r\n            btn.check_hover(pygame.mouse.get_pos())\r\n            btn.draw(screen)\r\n\r\n        x, y = pygame.mouse.get_pos()\r\n        screen.blit(cursor, (x - 2, y - 2))\r\n\r\n        pygame.display.flip()\r\n\r\n\r\ndef load_level(filename):\r\n    filename = \"data/\" + filename\r\n    # читаем уровень, убирая символы перевода строки\r\n    with open(filename, 'r') as mapFile:\r\n        level_map = [line.strip() for line in mapFile]\r\n\r\n    # и подсчитываем максимальную длину\r\n    max_width = max(map(len, level_map))\r\n\r\n    # дополняем каждую строку пустыми клетками ('.')\r\n    return list(map(lambda x: x.ljust(max_width, '.'), level_map))\r\n\r\n\r\ndef start_game():\r\n    screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n    generate_level(load_level(f'level_{cur_lvl}.txt'))\r\n    # board = Board(screen, level_x, level_y)\r\n    # board.set_view(0, 0, 50)\r\n    # board.render()\r\n    all_sprites.draw(screen)\r\n\r\n\r\ndef generate_level(level):\r\n    new_player, x, y = None, None, None\r\n    for y in range(len(level)):\r\n        for x in range(len(level[y])):\r\n            if level[y][x] == '.':\r\n                pass\r\n            elif level[y][x] == '#':\r\n                Tile('meteor', x, y)\r\n            elif level[y][x] == '@':\r\n                Tile('meteor', x, y)\r\n                new_player = Player(x, y)\r\n            elif level[y][x] == '&':\r\n                Tile('meteor', x, y)\r\n                Tile('nut', x, y)\r\n            elif level[y][x] == '$':\r\n                Tile('meteor', x, y)\r\n                Tile('key', x, y)\r\n            elif level[y][x] == '%':\r\n                Tile('meteor', x, y)\r\n                pass\r\n\r\n    # вернем игрока, а также размер поля в клетках\r\n    return new_player, x, y\r\n\r\n\r\ndef return_player():\r\n    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))\r\n    return player\r\n\r\n\r\nif __name__ == '__main__':\r\n    pygame.init()\r\n    pygame.display.set_caption(\"The squirrel's way\")\r\n    size = width, height = 1080, 720\r\n    screen = pygame.display.set_mode(size)\r\n\r\n    fps = 120  # количество кадров в секунду\r\n    clock = pygame.time.Clock()\r\n\r\n    # группы спрайтов\r\n    all_sprites = pygame.sprite.Group()\r\n    tiles_group = pygame.sprite.Group()\r\n    player_group = pygame.sprite.Group()\r\n\r\n    tile_images = {\r\n        'meteor': load_image('asteroid.jpg'),\r\n        'empty': load_image('blue_balloon.jpg'),\r\n        'key': load_image('key.png'),\r\n        'nut': load_image('nut.jpg')\r\n    }\r\n    player_image = load_image('player.jpg')\r\n    cursor = load_image('cursor.png')\r\n\r\n    tile = 50\r\n\r\n    cur_lvl = 2\r\n\r\n    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))\r\n\r\n    start_screen()\r\n\r\n    running = True\r\n    while running:\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                terminate()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_w or event.key == pygame.K_UP:\r\n                    player.move_up()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_a or event.key == pygame.K_LEFT:\r\n                    player.move_left()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_s or event.key == pygame.K_DOWN:\r\n                    player.move_down()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:\r\n                    player.move_right()\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_ESCAPE:\r\n                    menu.fade()\r\n                    start_screen()\r\n\r\n        screen.blit(load_image('bg_space.jpg'), (0, -12))\r\n        tiles_group.draw(screen)\r\n        player_group.draw(screen)\r\n\r\n        pygame.display.flip()\r\n        # изменение игрового мира\r\n        # ...\r\n        # временная задержка\r\n        clock.tick(fps)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	
+@@ -21,63 +21,178 @@
+     return image
+ 
+ 
++def level_completed():
++    resume_button = ImageButton(width / 2 - 300, 480, 252, 74, 'След. уровень', 'data/button.png',
++                                'data/button_hover.png', 'data/click.mp3')
++    mback_button = ImageButton(width / 2 + 20, 480, 252, 74, 'В меню', 'data/button.png',
++                               'data/button_hover.png', 'data/click.mp3')
++
++    running = True
++    while running:
++        screen.blit(load_image('bg_space.jpg'), (0, -12))
++
++        font = pygame.font.Font(None, 72)
++        text_surface = font.render("Уровень пройден", True, (255, 255, 255))
++        text_rect = text_surface.get_rect(center=(width / 2, 100))
++        screen.blit(text_surface, text_rect)
++
++        pygame.draw.rect(screen, (0, 1, 51), (width / 2 - 350, 130, 700, 500), 0)
++        pygame.draw.rect(screen, (150, 0, 0), (width / 2 - 350, 130, 700, 500), 8)
++        picture = pygame.image.load('data/level_end.png')
++        picture_rect = picture.get_rect(bottomright=(882, 476))
++        screen.blit(picture, picture_rect)
++
++        for event in pygame.event.get():
++            if event.type == pygame.QUIT:
++                running = False
++                pygame.quit()
++                sys.exit()
++
++            if event.type == pygame.KEYDOWN:
++                if event.key == pygame.K_ESCAPE:
++                    menu.fade()
++                    start_screen()
++
++            if event.type == pygame.USEREVENT and event.button == mback_button:
++                menu.fade()
++                start_screen()
++
++            if event.type == pygame.USEREVENT and event.button == resume_button:
++                menu.fade()
++                return start_game(cur_lvl + 1)
++
++            for btn in [resume_button, mback_button]:
++                btn.handle_event(event)
++
++        for btn in [resume_button, mback_button]:
++            btn.check_hover(pygame.mouse.get_pos())
++            btn.draw(screen)
++
++        x, y = pygame.mouse.get_pos()
++        screen.blit(cursor, (x - 2, y - 2))
++
++        pygame.display.flip()
++
++
++def level_menu():
++    level1_button = ImageButton(width / 2 - (252 / 2), 150, 252, 74, 'Уровень 1', 'data/button.png',
++                                'data/button_hover.png', 'data/click.mp3')
++    level2_button = ImageButton(width / 2 - (252 / 2), 250, 252, 74, 'Уровень 2', 'data/button.png',
++                                'data/button_hover.png', 'data/click.mp3')
++    back_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',
++                              'data/button_hover.png', 'data/click.mp3')
++
++    running = True
++    while running:
++        screen.blit(load_image('bg_space.jpg'), (0, -12))
++
++        font = pygame.font.Font(None, 72)
++        text_surface = font.render("Выберите уровень", True, (255, 255, 255))
++        text_rect = text_surface.get_rect(center=(width / 2, 100))
++        screen.blit(text_surface, text_rect)
++
++        for event in pygame.event.get():
++            if event.type == pygame.QUIT:
++                running = False
++                pygame.quit()
++                sys.exit()
++
++            if event.type == pygame.KEYDOWN:
++                if event.key == pygame.K_ESCAPE:
++                    menu.fade()
++                    running = False
++
++            if event.type == pygame.USEREVENT and event.button == back_button:
++                menu.fade()
++                running = False
++
++            if event.type == pygame.USEREVENT and event.button == level1_button:
++                menu.fade()
++                return start_game(1)
++
++            if event.type == pygame.USEREVENT and event.button == level2_button:
++                menu.fade()
++                return start_game(2)
++
++            # if event.type == pygame.USEREVENT and event.button == level3_button:
++            #     fade()
++            #     return main.start_game(2)
++
++            for btn in [level1_button, level2_button, back_button]:
++                btn.handle_event(event)
++
++        for btn in [level1_button, level2_button, back_button]:
++            btn.check_hover(pygame.mouse.get_pos())
++            btn.draw(screen)
++
++        x, y = pygame.mouse.get_pos()
++        screen.blit(cursor, (x - 2, y - 2))
++
++        pygame.display.flip()
++
++
+ class Tile(pygame.sprite.Sprite):
+-    def __init__(self, tile_type, pos_x, pos_y):
+-        super().__init__(tiles_group, all_sprites)
++    def __init__(self, tile_type, pos_x, pos_y, number):
++        super().__init__(tiles_group[number - 1], all_sprites[number - 1])  #
+         self.image = tile_images[tile_type]
+-        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))
++        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.55))
+ 
+ 
+ class Player(pygame.sprite.Sprite):
+-    def __init__(self, pos_x, pos_y):
+-        super().__init__(player_group, all_sprites)
++    def __init__(self, pos_x, pos_y, number):
++        super().__init__(player_group[number - 1], all_sprites[number - 1])
++        self.number = number
+         self.x = pos_x
+         self.y = pos_y
+         self.image = player_image
+-        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.57))
++        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.55))
+ 
+     def move_up(self):
+-        if can_move(self.x, self.y - 1):
++        if can_move(self.x, self.y - 1, self.number):
+             print('up')
+-            x, y = tile * self.x, tile * ((self.y - 1) * 0.57)
++            x, y = tile * self.x, tile * ((self.y - 1) * 0.55)
+             self.y -= 1
+             screen.blit(self.image, (x, y))
+-            self.rect = self.rect.move(0, -tile * 0.57)
++            self.rect = self.rect.move(0, -tile * 0.55)
+ 
+     def move_down(self):
+-        if can_move(self.x, self.y + 1):
++        if can_move(self.x, self.y + 1, self.number):
+             print('down')
+-            x, y = tile * self.x, tile * ((self.y + 1) * 0.57)
++            x, y = tile * self.x, tile * ((self.y + 1) * 0.55)
+             self.y += 1
+             screen.blit(self.image, (x, y))
+-            self.rect = self.rect.move(0, tile * 0.57)
++            self.rect = self.rect.move(0, tile * 0.55)
+ 
+     def move_right(self):
+-        if can_move(self.x + 1, self.y):
++        if can_move(self.x + 1, self.y, self.number):
+             print('right')
+-            x, y = tile * (self.x + 1), tile * (self.y * 0.57)
++            x, y = tile * (self.x + 1), tile * (self.y * 0.55)
+             self.x += 1
+             screen.blit(self.image, (x, y))
+             self.rect = self.rect.move(tile, 0)
+ 
+     def move_left(self):
+-        if can_move(self.x - 1, self.y):
++        if can_move(self.x - 1, self.y, self.number):
+             print('left')
+-            x, y = tile * (self.x - 1), tile * (self.y * 0.57)
++            x, y = tile * (self.x - 1), tile * (self.y * 0.55)
+             self.x -= 1
+             screen.blit(self.image, (x, y))
+             self.rect = self.rect.move(-tile, 0)
+ 
+ 
+-def can_move(x, y):
++def can_move(x, y, number):
+     print(x, y)
+     print(load_level(f'level_{cur_lvl}.txt')[y][x])
+     if load_level(f'level_{cur_lvl}.txt')[y][x] == '#' or \
+             load_level(f'level_{cur_lvl}.txt')[y][x] == '&' or \
+-            load_level(f'level_{cur_lvl}.txt')[y][x] == '$' or \
+             load_level(f'level_{cur_lvl}.txt')[y][x] == '@' or \
+             load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
+         return True
++    if load_level(f'level_{cur_lvl}.txt')[y][x] == '$':
++        load_level(f'level_{cur_lvl}.txt')[y][x] = '#'
++        tiles_group[number - 1].clear()
++
++        return True
+ 
+ 
+ def terminate():
+@@ -132,11 +247,12 @@
+ 
+             if event.type == pygame.USEREVENT and event.button == start_button:
+                 menu.fade()
+-                return start_game()
++                return start_game(1)
+ 
+             if event.type == pygame.USEREVENT and event.button == level_button:
++                running = False
+                 menu.fade()
+-                menu.level_menu()
++                level_menu()
+ 
+             if event.type == pygame.USEREVENT and event.button == exit_button:
+                 running = False
+@@ -168,43 +284,36 @@
+     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+ 
+ 
+-def start_game():
+-    screen.blit(load_image('bg_space.jpg'), (0, -12))
+-    generate_level(load_level(f'level_{cur_lvl}.txt'))
+-    # board = Board(screen, level_x, level_y)
+-    # board.set_view(0, 0, 50)
+-    # board.render()
+-    all_sprites.draw(screen)
+-
+-
+-def generate_level(level):
+-    new_player, x, y = None, None, None
++def generate_level(level, number):
++    new_player = None
+     for y in range(len(level)):
+         for x in range(len(level[y])):
+             if level[y][x] == '.':
+                 pass
+             elif level[y][x] == '#':
+-                Tile('meteor', x, y)
++                Tile('meteor', x, y, number)
+             elif level[y][x] == '@':
+-                Tile('meteor', x, y)
+-                new_player = Player(x, y)
++                Tile('meteor', x, y, number)
++                new_player = Player(x, y, number)
+             elif level[y][x] == '&':
+-                Tile('meteor', x, y)
+-                Tile('nut', x, y)
++                Tile('meteor', x, y, number)
++                Tile('nut', x, y, number)
+             elif level[y][x] == '$':
+-                Tile('meteor', x, y)
+-                Tile('key', x, y)
++                Tile('meteor', x, y, number)
++                Tile('key', x, y, number)
+             elif level[y][x] == '%':
+-                Tile('meteor', x, y)
++                Tile('meteor', x, y, number)
+                 pass
+ 
+     # вернем игрока, а также размер поля в клетках
+-    return new_player, x, y
++    return new_player
+ 
+ 
+-def return_player():
+-    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))
+-    return player
++def start_game(number):
++    global cur_lvl
++    screen.blit(load_image('bg_space.jpg'), (0, -12))
++    cur_lvl = number
++    all_sprites[number - 1].draw(screen)
+ 
+ 
+ if __name__ == '__main__':
+@@ -217,54 +326,71 @@
+     clock = pygame.time.Clock()
+ 
+     # группы спрайтов
+-    all_sprites = pygame.sprite.Group()
+-    tiles_group = pygame.sprite.Group()
+-    player_group = pygame.sprite.Group()
++    all_sprites_1 = pygame.sprite.Group()
++    all_sprites_2 = pygame.sprite.Group()
++    all_sprites_3 = pygame.sprite.Group()
++
++    tiles_group_1 = pygame.sprite.Group()
++    tiles_group_2 = pygame.sprite.Group()
++    tiles_group_3 = pygame.sprite.Group()
++
++    player_group_1 = pygame.sprite.Group()
++    player_group_2 = pygame.sprite.Group()
++    player_group_3 = pygame.sprite.Group()
++
++    tiles_group = [tiles_group_1, tiles_group_2, tiles_group_3]
++    player_group = [player_group_1, player_group_2, player_group_3]
++    all_sprites = [all_sprites_1, all_sprites_2, all_sprites_3]
+ 
+     tile_images = {
+         'meteor': load_image('asteroid.jpg'),
+-        'empty': load_image('blue_balloon.jpg'),
+         'key': load_image('key.png'),
+         'nut': load_image('nut.jpg')
+     }
+     player_image = load_image('player.jpg')
+     cursor = load_image('cursor.png')
+ 
+-    tile = 50
++    tile = 80
+ 
+-    cur_lvl = 2
+-
+-    player, level_x, level_y = generate_level(load_level(f'level_{cur_lvl}.txt'))
++    cur_lvl = 1
+ 
+     start_screen()
+ 
++    player_1 = generate_level(load_level(f'level_1.txt'), 1)
++    player_2 = generate_level(load_level(f'level_2.txt'), 2)
++    #player_3 = generate_level(load_level(f'level_3.txt'), 3)
++
++    player = [player_1, player_2]
++    print(all_sprites)
++    print(tiles_group)
++    print(player_group)
++
+     running = True
+     while running:
+-
++        screen.blit(load_image('bg_space.jpg'), (0, -12))
+         for event in pygame.event.get():
+             if event.type == pygame.QUIT:
+                 running = False
+                 terminate()
+             if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_w or event.key == pygame.K_UP:
+-                    player.move_up()
++                    player[cur_lvl - 1].move_up()
+             if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+-                    player.move_left()
++                    player[cur_lvl - 1].move_left()
+             if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+-                    player.move_down()
++                    player[cur_lvl - 1].move_down()
+             if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+-                    player.move_right()
++                    player[cur_lvl - 1].move_right()
+             if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_ESCAPE:
+                     menu.fade()
+                     start_screen()
+ 
+-        screen.blit(load_image('bg_space.jpg'), (0, -12))
+-        tiles_group.draw(screen)
+-        player_group.draw(screen)
++        tiles_group[cur_lvl - 1].draw(screen)
++        player_group[cur_lvl - 1].draw(screen)
+ 
+         pygame.display.flip()
+         # изменение игрового мира
+Index: menu.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pygame\r\nimport sys\r\nimport main\r\nfrom button import ImageButton\r\n\r\npygame.init()\r\n\r\nsize = WIDTH, HEIGHT = 1080, 720\r\nscreen = pygame.display.set_mode(size)\r\nMAX_FPS = 60\r\n\r\nmain_background = pygame.image.load('data/bg_space.jpg')\r\nclock = pygame.time.Clock()\r\ncursor = pygame.image.load('data/cursor.png')\r\npygame.mouse.set_visible(False)\r\n\r\n\r\ndef main_menu():\r\n    start_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    level_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    exit_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n\r\n    running = True\r\n    while running:\r\n        screen.blit(main_background, (0, -300))\r\n\r\n        font = pygame.font.Font(None, 72)\r\n        text_surface = font.render(\"The squirrel's way\", True, (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                pygame.quit()\r\n                sys.exit()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == start_button:\r\n                fade()\r\n                return main.start_game()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == level_button:\r\n                fade()\r\n                level_menu()\r\n\r\n            if event.type == pygame.USEREVENT and event.button == exit_button:\r\n                running = False\r\n                pygame.quit()\r\n                sys.exit()\r\n\r\n            for btn in [start_button, level_button, exit_button]:\r\n                btn.handle_event(event)\r\n\r\n        for btn in [start_button, level_button, exit_button]:\r\n            btn.check_hover(pygame.mouse.get_pos())\r\n            btn.draw(screen)\r\n\r\n        x, y = pygame.mouse.get_pos()\r\n        screen.blit(cursor, (x-2, y-2))\r\n\r\n        pygame.display.flip()\r\n\r\n\r\ndef level_menu():\r\n    level1_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Уровень 1', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    level2_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Уровень 2', 'data/button.png',\r\n                               'data/button_hover.png', 'data/click.mp3')\r\n    back_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',\r\n                              'data/button_hover.png', 'data/click.mp3')\r\n\r\n    running = True\r\n    while running:\r\n        screen.blit(main_background, (0, -12))\r\n\r\n        font = pygame.font.Font(None, 72)\r\n        text_surface = font.render(\"Выберите уровень\", True, (255, 255, 255))\r\n        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))\r\n        screen.blit(text_surface, text_rect)\r\n\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n                pygame.quit()\r\n                sys.exit()\r\n\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_ESCAPE:\r\n                    fade()\r\n                    running = False\r\n\r\n            if event.type == pygame.USEREVENT and event.button == back_button:\r\n                fade()\r\n                running = False\r\n\r\n            for btn in [level1_button, level2_button, back_button]:\r\n                btn.handle_event(event)\r\n\r\n        for btn in [level1_button, level2_button, back_button]:\r\n            btn.check_hover(pygame.mouse.get_pos())\r\n            btn.draw(screen)\r\n\r\n        x, y = pygame.mouse.get_pos()\r\n        screen.blit(cursor, (x - 2, y - 2))\r\n\r\n        pygame.display.flip()\r\n\r\n\r\ndef fade():\r\n    running = True\r\n    fade_alpha = 0\r\n\r\n    while running:\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                running = False\r\n\r\n        fade_surface = pygame.Surface((WIDTH, HEIGHT))\r\n        fade_surface.fill((0, 0, 0))\r\n        fade_surface.set_alpha(fade_alpha)\r\n        screen.blit(fade_surface, (0, 0))\r\n\r\n        fade_alpha += 5\r\n        if fade_alpha >= 105:\r\n            fade_alpha = 255\r\n            running = False\r\n\r\n        pygame.display.flip()\r\n        clock.tick(MAX_FPS)\r\n\r\n\r\nif __name__ == '__main__':\r\n    main_menu()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/menu.py b/menu.py
+--- a/menu.py	
++++ b/menu.py	
+@@ -1,7 +1,4 @@
+ import pygame
+-import sys
+-import main
+-from button import ImageButton
+ 
+ pygame.init()
+ 
+@@ -9,106 +6,10 @@
+ screen = pygame.display.set_mode(size)
+ MAX_FPS = 60
+ 
+-main_background = pygame.image.load('data/bg_space.jpg')
+ clock = pygame.time.Clock()
+-cursor = pygame.image.load('data/cursor.png')
+ pygame.mouse.set_visible(False)
+ 
+ 
+-def main_menu():
+-    start_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Играть', 'data/button.png',
+-                               'data/button_hover.png', 'data/click.mp3')
+-    level_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Выбрать уровень', 'data/button.png',
+-                               'data/button_hover.png', 'data/click.mp3')
+-    exit_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Выйти', 'data/button.png',
+-                               'data/button_hover.png', 'data/click.mp3')
+-
+-    running = True
+-    while running:
+-        screen.blit(main_background, (0, -300))
+-
+-        font = pygame.font.Font(None, 72)
+-        text_surface = font.render("The squirrel's way", True, (255, 255, 255))
+-        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))
+-        screen.blit(text_surface, text_rect)
+-
+-        for event in pygame.event.get():
+-            if event.type == pygame.QUIT:
+-                running = False
+-                pygame.quit()
+-                sys.exit()
+-
+-            if event.type == pygame.USEREVENT and event.button == start_button:
+-                fade()
+-                return main.start_game()
+-
+-            if event.type == pygame.USEREVENT and event.button == level_button:
+-                fade()
+-                level_menu()
+-
+-            if event.type == pygame.USEREVENT and event.button == exit_button:
+-                running = False
+-                pygame.quit()
+-                sys.exit()
+-
+-            for btn in [start_button, level_button, exit_button]:
+-                btn.handle_event(event)
+-
+-        for btn in [start_button, level_button, exit_button]:
+-            btn.check_hover(pygame.mouse.get_pos())
+-            btn.draw(screen)
+-
+-        x, y = pygame.mouse.get_pos()
+-        screen.blit(cursor, (x-2, y-2))
+-
+-        pygame.display.flip()
+-
+-
+-def level_menu():
+-    level1_button = ImageButton(WIDTH / 2 - (252 / 2), 150, 252, 74, 'Уровень 1', 'data/button.png',
+-                               'data/button_hover.png', 'data/click.mp3')
+-    level2_button = ImageButton(WIDTH / 2 - (252 / 2), 250, 252, 74, 'Уровень 2', 'data/button.png',
+-                               'data/button_hover.png', 'data/click.mp3')
+-    back_button = ImageButton(WIDTH / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',
+-                              'data/button_hover.png', 'data/click.mp3')
+-
+-    running = True
+-    while running:
+-        screen.blit(main_background, (0, -12))
+-
+-        font = pygame.font.Font(None, 72)
+-        text_surface = font.render("Выберите уровень", True, (255, 255, 255))
+-        text_rect = text_surface.get_rect(center=(WIDTH / 2, 100))
+-        screen.blit(text_surface, text_rect)
+-
+-        for event in pygame.event.get():
+-            if event.type == pygame.QUIT:
+-                running = False
+-                pygame.quit()
+-                sys.exit()
+-
+-            if event.type == pygame.KEYDOWN:
+-                if event.key == pygame.K_ESCAPE:
+-                    fade()
+-                    running = False
+-
+-            if event.type == pygame.USEREVENT and event.button == back_button:
+-                fade()
+-                running = False
+-
+-            for btn in [level1_button, level2_button, back_button]:
+-                btn.handle_event(event)
+-
+-        for btn in [level1_button, level2_button, back_button]:
+-            btn.check_hover(pygame.mouse.get_pos())
+-            btn.draw(screen)
+-
+-        x, y = pygame.mouse.get_pos()
+-        screen.blit(cursor, (x - 2, y - 2))
+-
+-        pygame.display.flip()
+-
+-
+ def fade():
+     running = True
+     fade_alpha = 0
+@@ -130,7 +31,3 @@
+ 
+         pygame.display.flip()
+         clock.tick(MAX_FPS)
+-
+-
+-if __name__ == '__main__':
+-    main_menu()
