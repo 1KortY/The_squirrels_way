@@ -17,6 +17,7 @@ key4 = [1, 2, 3, 4]
 key5 = [1, 2, 3, 4]
 time_3 = 22
 time_4 = 33
+g = []
 
 
 def load_image(name, colorkey=None):
@@ -36,9 +37,11 @@ def load_image(name, colorkey=None):
 
 
 def level_completed():
+    global g
     if cur_lvl == 4:
         mback_button = ImageButton(width / 2 - 126, 480, 252, 74, 'В меню', 'data/button.png',
                                    'data/button_hover.png', 'data/click.mp3')
+        g.append(cur_lvl)
         running = True
         while running:
             screen.blit(load_image('bg_space.jpg'), (0, -12))
@@ -85,6 +88,7 @@ def level_completed():
                                     'data/button_hover.png', 'data/click.mp3')
         mback_button = ImageButton(width / 2 + 20, 480, 252, 74, 'В меню', 'data/button.png',
                                    'data/button_hover.png', 'data/click.mp3')
+        g.append(cur_lvl)
         running = True
         while running:
             screen.blit(load_image('bg_space.jpg'), (0, -12))
@@ -134,9 +138,15 @@ def level_menu():
     back_button = ImageButton(width / 2 - (252 / 2), 550, 252, 74, 'Назад', 'data/button.png',
                               'data/button_hover.png', 'data/click.mp3')
 
+
     running = True
     while running:
         screen.blit(load_image('bg_space.jpg'), (0, -12))
+        for i in g:
+            pygame.draw.line(screen, (0, 250, 0), (width / 2 + 130, 60 + 100 * i), (width / 2 + 145, 40 + 100 * i + 74),
+                             7)
+            pygame.draw.line(screen, (0, 250, 0), (width / 2 + 145, 40 + 100 * i + 74),
+                             (width / 2 + 165, 50 + 100 * i - 20), 7)
 
         font = pygame.font.Font(None, 72)
         text_surface = font.render("Выберите уровень", True, (255, 255, 255))
@@ -479,6 +489,10 @@ def inscriptions():
         text_rect = text_surface.get_rect(x=350, y=27)
         screen.blit(text_surface, text_rect)
 
+        if time_3 <= 0:
+            time_3 = 22
+            return start_screen()
+
     elif cur_lvl == 4:
         global time_4
         text_surface = font.render(f"Собрано ключей: {keys}/5", True,
@@ -496,6 +510,10 @@ def inscriptions():
                                    (255, 255, 255))
         text_rect = text_surface.get_rect(x=350, y=27)
         screen.blit(text_surface, text_rect)
+
+        if time_4 <= 0:
+            time_4 = 33
+            return start_screen()
 
 
 def start_game(number):
