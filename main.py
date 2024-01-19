@@ -1,7 +1,6 @@
 import os
 import sys
 import pygame
-import time
 import menu
 from button import ImageButton
 
@@ -18,6 +17,7 @@ key5 = [1, 2, 3, 4]
 time_3 = 22
 time_4 = 33
 g = []
+k = ['$', '*', '(', ')', '+']
 
 
 def load_image(name, colorkey=None):
@@ -260,28 +260,38 @@ def can_move(x, y, number):
             load_level(f'level_{cur_lvl}.txt')[y][x] == '@':
         return True
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '$':
-        key1[number - 1].lifting_key()
-        keys += 1
+        if '$' in k:
+            key1[number - 1].lifting_key()
+            keys += 1
+            k.remove('$')
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '*':
-        key2[number - 1].lifting_key()
-        keys += 1
+        if '*' in k:
+            key2[number - 1].lifting_key()
+            keys += 1
+            k.remove('*')
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '(':
-        key3[number - 1].lifting_key()
-        keys += 1
+        if '(' in k:
+            key3[number - 1].lifting_key()
+            keys += 1
+            k.remove('(')
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == ')':
-        key4[number - 1].lifting_key()
-        keys += 1
+        if '(' in k:
+            key4[number - 1].lifting_key()
+            keys += 1
+            k.remove(')')
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '+':
-        key5[number - 1].lifting_key()
-        keys += 1
+        if '+' in k:
+            key5[number - 1].lifting_key()
+            keys += 1
+            k.remove('+')
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
