@@ -14,7 +14,7 @@ key2 = [1, 2, 3, 4]
 key3 = [1, 2, 3, 4]
 key4 = [1, 2, 3, 4]
 key5 = [1, 2, 3, 4]
-time_3 = 2
+time_3 = 22
 time_4 = 33
 g = []
 k = ['$', '*', '(', ')', '+']
@@ -39,7 +39,9 @@ def load_image(name, colorkey=None):
 
 def level_completed():
     global g
+    global end
     if end:
+        end = False
         restart_button = ImageButton(width / 2 - 300, 480, 252, 74, 'Начать заново', 'data/button.png',
                                      'data/button_hover.png', 'data/click.mp3')
         mback_button = ImageButton(width / 2 + 20, 480, 252, 74, 'В меню', 'data/button.png',
@@ -178,7 +180,6 @@ def level_menu():
                                 'data/button_hover.png', 'data/click.mp3')
     back_button = ImageButton(width / 2 - (252 / 2), 550, 252, 74, 'Назад', 'data/button.png',
                               'data/button_hover.png', 'data/click.mp3')
-
 
     running = True
     while running:
@@ -574,6 +575,8 @@ def start_game(number):
     global cur_lvl
     global keys
     global player, door, key1, key2, key3, key4, key5
+    global k
+    k = ['$', '*', '(', ')', '+']
     keys = 0
     cur_lvl = number
 
