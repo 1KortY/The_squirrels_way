@@ -1,8 +1,22 @@
 import os
 import sys
 import pygame
+import time
 import menu
 from button import ImageButton
+
+keys = 0
+tile = 80
+cur_lvl = 1
+player = [1, 2, 3, 4]
+door = [1, 2, 3, 4]
+key1 = [1, 2, 3, 4]
+key2 = [1, 2, 3, 4]
+key3 = [1, 2, 3, 4]
+key4 = [1, 2, 3, 4]
+key5 = [1, 2, 3, 4]
+time_3 = 22
+time_4 = 33
 
 
 def load_image(name, colorkey=None):
@@ -22,56 +36,90 @@ def load_image(name, colorkey=None):
 
 
 def level_completed():
-    resume_button = ImageButton(width / 2 - 300, 480, 252, 74, 'След. уровень', 'data/button.png',
-                                'data/button_hover.png', 'data/click.mp3')
-    mback_button = ImageButton(width / 2 + 20, 480, 252, 74, 'В меню', 'data/button.png',
-                               'data/button_hover.png', 'data/click.mp3')
+    if cur_lvl == 4:
+        mback_button = ImageButton(width / 2 - 126, 480, 252, 74, 'В меню', 'data/button.png',
+                                   'data/button_hover.png', 'data/click.mp3')
+        running = True
+        while running:
+            screen.blit(load_image('bg_space.jpg'), (0, -12))
 
-    running = True
-    while running:
-        screen.blit(load_image('bg_space.jpg'), (0, -12))
+            font = pygame.font.Font(None, 72)
+            text_surface = font.render("Уровень пройден!", True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(width / 2, 100))
+            screen.blit(text_surface, text_rect)
 
-        font = pygame.font.Font(None, 72)
-        text_surface = font.render("Уровень пройден", True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(width / 2, 100))
-        screen.blit(text_surface, text_rect)
+            pygame.draw.rect(screen, (0, 1, 51), (width / 2 - 350, 130, 700, 500), 0)
+            pygame.draw.rect(screen, (150, 0, 0), (width / 2 - 350, 130, 700, 500), 8)
+            picture = pygame.image.load('data/level_end.png')
+            picture_rect = picture.get_rect(bottomright=(882, 476))
+            screen.blit(picture, picture_rect)
 
-        pygame.draw.rect(screen, (0, 1, 51), (width / 2 - 350, 130, 700, 500), 0)
-        pygame.draw.rect(screen, (150, 0, 0), (width / 2 - 350, 130, 700, 500), 8)
-        picture = pygame.image.load('data/level_end.png')
-        picture_rect = picture.get_rect(bottomright=(882, 476))
-        screen.blit(picture, picture_rect)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    sys.exit()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                pygame.quit()
-                sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        menu.fade()
+                        start_screen()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.USEREVENT and event.button == mback_button:
                     menu.fade()
-                    start_screen()
+                    return start_screen()
 
-            if event.type == pygame.USEREVENT and event.button == mback_button:
-                menu.fade()
-                start_screen()
+                for btn in [mback_button]:
+                    btn.handle_event(event)
 
-            if event.type == pygame.USEREVENT and event.button == resume_button:
-                menu.fade()
-                return start_game(cur_lvl + 1)
+            for btn in [mback_button]:
+                btn.check_hover(pygame.mouse.get_pos())
+                btn.draw(screen)
 
+            x, y = pygame.mouse.get_pos()
+            screen.blit(cursor, (x - 2, y - 2))
+
+            pygame.display.flip()
+    else:
+        resume_button = ImageButton(width / 2 - 300, 480, 252, 74, 'След. уровень', 'data/button.png',
+                                    'data/button_hover.png', 'data/click.mp3')
+        mback_button = ImageButton(width / 2 + 20, 480, 252, 74, 'В меню', 'data/button.png',
+                                   'data/button_hover.png', 'data/click.mp3')
+        running = True
+        while running:
+            screen.blit(load_image('bg_space.jpg'), (0, -12))
+            font = pygame.font.Font(None, 72)
+            text_surface = font.render("Уровень пройден!", True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(width / 2, 100))
+            screen.blit(text_surface, text_rect)
+            pygame.draw.rect(screen, (0, 1, 51), (width / 2 - 350, 130, 700, 500), 0)
+            pygame.draw.rect(screen, (150, 0, 0), (width / 2 - 350, 130, 700, 500), 8)
+            picture = pygame.image.load('data/level_end.png')
+            picture_rect = picture.get_rect(bottomright=(882, 476))
+            screen.blit(picture, picture_rect)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        menu.fade()
+                        start_screen()
+                if event.type == pygame.USEREVENT and event.button == mback_button:
+                    menu.fade()
+                    return start_screen()
+                if event.type == pygame.USEREVENT and event.button == resume_button:
+                    menu.fade()
+                    return start_game(cur_lvl + 1)
+                for btn in [resume_button, mback_button]:
+                    btn.handle_event(event)
             for btn in [resume_button, mback_button]:
-                btn.handle_event(event)
-
-        for btn in [resume_button, mback_button]:
-            btn.check_hover(pygame.mouse.get_pos())
-            btn.draw(screen)
-
-        x, y = pygame.mouse.get_pos()
-        screen.blit(cursor, (x - 2, y - 2))
-
-        pygame.display.flip()
+                btn.check_hover(pygame.mouse.get_pos())
+                btn.draw(screen)
+            x, y = pygame.mouse.get_pos()
+            screen.blit(cursor, (x - 2, y - 2))
+            pygame.display.flip()
 
 
 def level_menu():
@@ -79,7 +127,11 @@ def level_menu():
                                 'data/button_hover.png', 'data/click.mp3')
     level2_button = ImageButton(width / 2 - (252 / 2), 250, 252, 74, 'Уровень 2', 'data/button.png',
                                 'data/button_hover.png', 'data/click.mp3')
-    back_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Назад', 'data/button.png',
+    level3_button = ImageButton(width / 2 - (252 / 2), 350, 252, 74, 'Уровень 3', 'data/button.png',
+                                'data/button_hover.png', 'data/click.mp3')
+    level4_button = ImageButton(width / 2 - (252 / 2), 450, 252, 74, 'Уровень 4', 'data/button.png',
+                                'data/button_hover.png', 'data/click.mp3')
+    back_button = ImageButton(width / 2 - (252 / 2), 550, 252, 74, 'Назад', 'data/button.png',
                               'data/button_hover.png', 'data/click.mp3')
 
     running = True
@@ -105,6 +157,7 @@ def level_menu():
             if event.type == pygame.USEREVENT and event.button == back_button:
                 menu.fade()
                 running = False
+                return start_screen()
 
             if event.type == pygame.USEREVENT and event.button == level1_button:
                 menu.fade()
@@ -114,14 +167,18 @@ def level_menu():
                 menu.fade()
                 return start_game(2)
 
-            # if event.type == pygame.USEREVENT and event.button == level3_button:
-            #     fade()
-            #     return main.start_game(2)
+            if event.type == pygame.USEREVENT and event.button == level3_button:
+                menu.fade()
+                return start_game(3)
 
-            for btn in [level1_button, level2_button, back_button]:
+            if event.type == pygame.USEREVENT and event.button == level4_button:
+                menu.fade()
+                return start_game(4)
+
+            for btn in [level1_button, level2_button, level3_button, level4_button, back_button]:
                 btn.handle_event(event)
 
-        for btn in [level1_button, level2_button, back_button]:
+        for btn in [level1_button, level2_button, level3_button, level4_button, back_button]:
             btn.check_hover(pygame.mouse.get_pos())
             btn.draw(screen)
 
@@ -138,12 +195,15 @@ class Tile(pygame.sprite.Sprite):
         self.y = pos_y
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.55))
+        if tile_type == 'key':
+            self.rect = self.rect.move(23, -20)
+        if tile_type == 'nut':
+            self.rect = self.rect.move(15, -5)
+        if tile_type == 'door' or tile_type == 'door_open':
+            self.rect = self.rect.move(10, -15)
 
     def lifting_key(self):
         self.rect = self.rect.move(0, -1000)
-
-    def open_door(self):
-
 
 
 class Player(pygame.sprite.Sprite):
@@ -153,58 +213,90 @@ class Player(pygame.sprite.Sprite):
         self.x = pos_x
         self.y = pos_y
         self.image = player_image
-        self.rect = self.image.get_rect().move(tile * pos_x, tile * (pos_y * 0.55))
+        self.rect = self.image.get_rect().move(tile * pos_x + 10, tile * (pos_y * 0.55) - 40)
 
     def move_up(self):
         if can_move(self.x, self.y - 1, self.number):
-            print('up')
-            x, y = tile * self.x, tile * ((self.y - 1) * 0.55)
+            x, y = tile * self.x + 10, tile * ((self.y - 1) * 0.55 - 40)
             self.y -= 1
             screen.blit(self.image, (x, y))
             self.rect = self.rect.move(0, -tile * 0.55)
 
     def move_down(self):
         if can_move(self.x, self.y + 1, self.number):
-            print('down')
-            x, y = tile * self.x, tile * ((self.y + 1) * 0.55)
+            x, y = tile * self.x + 10, tile * ((self.y + 1) * 0.55 - 40)
             self.y += 1
             screen.blit(self.image, (x, y))
             self.rect = self.rect.move(0, tile * 0.55)
 
     def move_right(self):
         if can_move(self.x + 1, self.y, self.number):
-            print('right')
-            x, y = tile * (self.x + 1), tile * (self.y * 0.55)
+            x, y = tile * (self.x + 1) + 10, tile * (self.y * 0.55) - 40
             self.x += 1
             screen.blit(self.image, (x, y))
             self.rect = self.rect.move(tile, 0)
 
     def move_left(self):
         if can_move(self.x - 1, self.y, self.number):
-            print('left')
-            x, y = tile * (self.x - 1), tile * (self.y * 0.55)
+            x, y = tile * (self.x - 1) + 10, tile * (self.y * 0.55) - 40
             self.x -= 1
             screen.blit(self.image, (x, y))
             self.rect = self.rect.move(-tile, 0)
 
 
 def can_move(x, y, number):
-    print(x, y)
-    print(load_level(f'level_{cur_lvl}.txt')[y][x])
+    global keys
     if load_level(f'level_{cur_lvl}.txt')[y][x] == '#' or \
-            load_level(f'level_{cur_lvl}.txt')[y][x] == '&' or \
-            load_level(f'level_{cur_lvl}.txt')[y][x] == '@' or \
-            load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
+            load_level(f'level_{cur_lvl}.txt')[y][x] == '@':
         return True
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == '$':
         key1[number - 1].lifting_key()
+        keys += 1
         return True
-    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '№':
-        key2[number - 1].lifting_key()
-        return True
-    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '?':
-        door[number - 1].
 
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '*':
+        key2[number - 1].lifting_key()
+        keys += 1
+        return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '(':
+        key3[number - 1].lifting_key()
+        keys += 1
+        return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == ')':
+        key4[number - 1].lifting_key()
+        keys += 1
+        return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '+':
+        key5[number - 1].lifting_key()
+        keys += 1
+        return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '%':
+        if number == 1 and keys == 1:
+            return True
+        elif number == 2 and keys == 2:
+            return True
+        elif number == 3 and keys == 3:
+            return True
+        elif number == 4 and keys == 5:
+            return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '?':
+        if number == 1 and keys == 1:
+            door[number - 1].lifting_key()
+        elif number == 2 and keys == 2:
+            door[number - 1].lifting_key()
+        elif number == 3 and keys == 3:
+            door[number - 1].lifting_key()
+        elif number == 4 and keys == 5:
+            door[number - 1].lifting_key()
+        return True
+
+    elif load_level(f'level_{cur_lvl}.txt')[y][x] == '&':
+        level_completed()
 
 
 def terminate():
@@ -297,39 +389,154 @@ def load_level(filename):
 
 
 def generate_level(level, number):
-    new_player, door, key_1, key_2, door_open = None, None, None, None, None
+    new_player, door, key_1, key_2, key_3, key_4, key_5 = None, None, None, None, None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
                 pass
             elif level[y][x] == '#':
                 Tile('meteor', x, y, number)
+
             elif level[y][x] == '@':
                 Tile('meteor', x, y, number)
                 new_player = Player(x, y, number)
+
             elif level[y][x] == '&':
                 Tile('meteor', x, y, number)
                 Tile('nut', x, y, number)
+
             elif level[y][x] == '$':
                 Tile('meteor', x, y, number)
                 key_1 = Tile('key', x, y, number)
-            elif level[y][x] == '№':
+
+            elif level[y][x] == '*':
                 Tile('meteor', x, y, number)
                 key_2 = Tile('key', x, y, number)
+
+            elif level[y][x] == '(':
+                Tile('meteor', x, y, number)
+                key_3 = Tile('key', x, y, number)
+
+            elif level[y][x] == ')':
+                Tile('meteor', x, y, number)
+                key_4 = Tile('key', x, y, number)
+
+            elif level[y][x] == '+':
+                Tile('meteor', x, y, number)
+                key_5 = Tile('key', x, y, number)
+
             elif level[y][x] == '%':
                 Tile('meteor', x, y, number)
+                Tile('door_open', x, y, number)
                 door = Tile('door', x, y, number)
-                door_open = Tile('door', x, y, number)
-                door_open.
+
+            elif level[y][x] == '?':
+                Tile('meteor', x, y, number)
 
     # вернем игрока, а также размер поля в клетках
-    return new_player, door, key_1, key_2, door_open
+    return new_player, door, key_1, key_2, key_3, key_4, key_5
+
+
+def inscriptions():
+    font = pygame.font.Font(None, 40)
+    if cur_lvl == 1:
+        text_surface = font.render(f"Собрано ключей: {keys}/1", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(900, 40))
+        screen.blit(text_surface, text_rect)
+
+        text_surface = font.render(f"Уровень 1", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(100, 40))
+        screen.blit(text_surface, text_rect)
+
+    elif cur_lvl == 2:
+        text_surface = font.render(f"Собрано ключей: {keys}/2", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(900, 40))
+        screen.blit(text_surface, text_rect)
+
+        text_surface = font.render(f"Уровень 2", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(100, 40))
+        screen.blit(text_surface, text_rect)
+
+    elif cur_lvl == 3:
+        global time_3
+        text_surface = font.render(f"Собрано ключей: {keys}/3", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(900, 40))
+        screen.blit(text_surface, text_rect)
+
+        text_surface = font.render(f"Уровень 3", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(100, 40))
+        screen.blit(text_surface, text_rect)
+
+        time_3 -= 0.016
+        text_surface = font.render(f"Осталось времени: {round(time_3, 2)}", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(x=350, y=27)
+        screen.blit(text_surface, text_rect)
+
+    elif cur_lvl == 4:
+        global time_4
+        text_surface = font.render(f"Собрано ключей: {keys}/5", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(900, 40))
+        screen.blit(text_surface, text_rect)
+
+        text_surface = font.render(f"Уровень 4", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(100, 40))
+        screen.blit(text_surface, text_rect)
+
+        time_4 -= 0.016
+        text_surface = font.render(f"Осталось времени: {round(time_4, 2)}", True,
+                                   (255, 255, 255))
+        text_rect = text_surface.get_rect(x=350, y=27)
+        screen.blit(text_surface, text_rect)
 
 
 def start_game(number):
     global cur_lvl
-    screen.blit(load_image('bg_space.jpg'), (0, -12))
+    global keys
+    global player, door, key1, key2, key3, key4, key5
+    keys = 0
     cur_lvl = number
+
+    all_sprites_1.empty()
+    all_sprites_2.empty()
+    all_sprites_3.empty()
+    all_sprites_4.empty()
+
+    tiles_group_1.empty()
+    tiles_group_2.empty()
+    tiles_group_3.empty()
+    tiles_group_4.empty()
+
+    player_group_1.empty()
+    player_group_2.empty()
+    player_group_3.empty()
+    player_group_4.empty()
+
+    player_1, door_1, key1_1, key2_1, key3_1, key4_1, key5_1 = generate_level(load_level(f'level_1.txt'), 1)
+    player_2, door_2, key1_2, key2_2, key3_2, key4_2, key5_2 = generate_level(load_level(f'level_2.txt'), 2)
+    player_3, door_3, key1_3, key2_3, key3_3, key4_3, key5_3 = generate_level(load_level(f'level_3.txt'), 3)
+    player_4, door_4, key1_4, key2_4, key3_4, key4_4, key5_4 = generate_level(load_level(f'level_4.txt'), 4)
+
+    player = [player_1, player_2, player_3, player_4]
+    door = [door_1, door_2, door_3, door_4]
+    key1 = [key1_1, key1_2, key1_3, key1_4]
+    key2 = [key2_1, key2_2, key2_3, key2_4]
+    key3 = [key3_1, key3_2, key3_3, key3_4]
+    key4 = [key4_1, key4_2, key4_3, key4_4]
+    key5 = [key5_1, key5_2, key5_3, key5_4]
+
+    screen.blit(load_image('bg_space.jpg'), (0, -12))
+
+    inscriptions()
+
     all_sprites[number - 1].draw(screen)
 
 
@@ -346,52 +553,38 @@ if __name__ == '__main__':
     all_sprites_1 = pygame.sprite.Group()
     all_sprites_2 = pygame.sprite.Group()
     all_sprites_3 = pygame.sprite.Group()
+    all_sprites_4 = pygame.sprite.Group()
 
     tiles_group_1 = pygame.sprite.Group()
     tiles_group_2 = pygame.sprite.Group()
     tiles_group_3 = pygame.sprite.Group()
+    tiles_group_4 = pygame.sprite.Group()
 
     player_group_1 = pygame.sprite.Group()
     player_group_2 = pygame.sprite.Group()
     player_group_3 = pygame.sprite.Group()
+    player_group_4 = pygame.sprite.Group()
 
-    tiles_group = [tiles_group_1, tiles_group_2, tiles_group_3]
-    player_group = [player_group_1, player_group_2, player_group_3]
-    all_sprites = [all_sprites_1, all_sprites_2, all_sprites_3]
+    tiles_group = [tiles_group_1, tiles_group_2, tiles_group_3, tiles_group_4]
+    player_group = [player_group_1, player_group_2, player_group_3, player_group_4]
+    all_sprites = [all_sprites_1, all_sprites_2, all_sprites_3, all_sprites_4]
 
     tile_images = {
         'meteor': load_image('asteroid.png'),
         'key': load_image('key.png'),
         'nut': load_image('nut.png'),
         'door': load_image('door.png'),
-        #'door_open': load_image('door_open.png')
+        'door_open': load_image('door_open.png')
     }
     player_image = load_image('player.png')
     cursor = load_image('cursor.png')
 
-    tile = 80
-
-    cur_lvl = 1
-
     start_screen()
-
-    player_1, door_1, key1_1, key2_1, door_open_1 = generate_level(load_level(f'level_1.txt'), 1)
-    player_2, door_2, key1_2, key2_2, door_open_2 = generate_level(load_level(f'level_2.txt'), 2)
-    #player_3, door_3, key1_3, key2_3, door_open_3 = generate_level(load_level(f'level_3.txt'), 3)
-
-    player = [player_1, player_2]
-    door = [door_1, door_2]
-    key1 = [key1_1, key1_2]
-    key2 = [key2_1, key2_2]
-    door_open = [door_open_1, door_open_2]
-
-    print(all_sprites)
-    print(tiles_group)
-    print(player_group)
 
     running = True
     while running:
         screen.blit(load_image('bg_space.jpg'), (0, -12))
+        inscriptions()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -417,7 +610,4 @@ if __name__ == '__main__':
         player_group[cur_lvl - 1].draw(screen)
 
         pygame.display.flip()
-        # изменение игрового мира
-        # ...
-        # временная задержка
         clock.tick(fps)
