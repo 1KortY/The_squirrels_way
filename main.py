@@ -323,7 +323,7 @@ def can_move(x, y, number):
         return True
 
     elif load_level(f'level_{cur_lvl}.txt')[y][x] == ')':
-        if '(' in k:
+        if ')' in k:
             key4[number - 1].lifting_key()
             keys += 1
             k.remove(')')

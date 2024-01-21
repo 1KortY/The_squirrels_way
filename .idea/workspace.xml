@@ -6,6 +6,98 @@
   <component name="ChangeListManager">
     <list default="true" id="7faef6e7-cd11-4e6f-9a85-a028f1487ff3" name="Changes" comment="Гатова">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/main/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/main.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/SDL2.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/SDL2_image.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/SDL2_mixer.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/SDL2_ttf.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/VCRUNTIME140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_bz2.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_ctypes.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_decimal.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_hashlib.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_lzma.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_queue.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_socket.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_ssl.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/_wmi.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/base_library.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/freetype.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libcrypto-3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libffi-8.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libjpeg-9.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libmodplug-1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libogg-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libopus-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libopusfile-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libpng16-16.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libssl-3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libtiff-5.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/libwebp-7.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/portmidi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pyexpat.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/SDL2.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/SDL2_image.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/SDL2_mixer.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/SDL2_ttf.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/_freetype.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/base.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/bufferproxy.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/color.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/constants.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/display.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/draw.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/event.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/font.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/freesansbold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/freetype.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/image.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/imageext.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/joystick.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/key.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/libjpeg-9.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/libogg-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/libopus-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/libpng16-16.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/mask.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/math.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/mixer.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/mixer_music.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/mouse.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/pixelarray.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/pixelcopy.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/pygame_icon.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/rect.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/rwobject.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/scrap.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/surface.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/surflock.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/time.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/transform.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/pygame/zlib1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/python312.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/select.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/unicodedata.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/_internal/zlib1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/asteroid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/bg_space.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/button.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/button_hover.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/click.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/cursor.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/door.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/door_open.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/game_over.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/key.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/level_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/level_2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/level_3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/level_4.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/level_end.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/nut.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/data/player.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.exe" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705675639037</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Гатова">
+      <option name="closed" value="true" />
+      <created>1705677809918</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1705677809918</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
