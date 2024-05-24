@@ -21,6 +21,23 @@ k = ['$', '*', '(', ')', '+']
 end = False
 
 
+class Camera:
+    # зададим начальный сдвиг камеры
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+
+    # сдвинуть объект obj на смещение камеры
+    def apply(self, obj):
+        obj.rect.x += self.x
+        obj.rect.y += self.y
+
+    # позиционировать камеру на объекте target
+    def update(self, target):
+        self.x = -(target.rect.x + target.rect.w // 2 - width // 2)
+        self.y = -(target.rect.y + target.rect.h // 2 - height // 2)
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
@@ -656,10 +673,19 @@ if __name__ == '__main__':
 
     start_screen()
 
+    camera = Camera()
+
     running = True
     while running:
         screen.blit(load_image('bg_space.jpg'), (0, -12))
         inscriptions()
+
+        # изменяем ракурс камеры
+        camera.update(player[cur_lvl - 1])
+        # обновляем положение всех спрайтов
+        for sprite in all_sprites[cur_lvl - 1]:
+            camera.apply(sprite)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
