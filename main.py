@@ -20,6 +20,8 @@ time_4 = 33
 g = []
 k = ['$', '*', '(', ')', '+']
 end = False
+camera_x = 0
+camera_y = 0
 
 
 class Camera:
@@ -34,9 +36,12 @@ class Camera:
         obj.rect.y += self.y
 
     # позиционировать камеру на объекте target
-    def update(self, target):
-        self.x = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.y = -(target.rect.y + target.rect.h // 2 - height // 2)
+    def update(self, target, n=0):
+        if n == 1:
+            self.x = -(target.rect.x + target.rect.w // 2 - width // 2)
+        else:
+            self.x = -(target.rect.x + target.rect.w // 2 - width // 2)
+            self.y = -(target.rect.y + target.rect.h // 2 - height // 2)
 
 
 def load_image(name, colorkey=None):
@@ -334,17 +339,25 @@ class Player(pygame.sprite.Sprite):
             x, y = tile * (self.x + 1) + 10, tile * (self.y * 0.55) - 40
             self.x += 1
             screen.blit(self.image, (x, y))
+            x = -3
+            y = 0
             for i in range(16):
                 screen.blit(load_image('bg_space.jpg'), (0, -12))
                 inscriptions()
 
                 # изменяем ракурс камеры
-                camera.update(player[cur_lvl - 1])
+                camera.update(player[cur_lvl - 1], 1)
                 # обновляем положение всех спрайтов
                 for sprite in all_sprites[cur_lvl - 1]:
                     camera.apply(sprite)
 
-                self.rect = self.rect.move(5, 0)
+                if i == 1:
+                    y = -1
+                elif i == 9:
+                    y = 1
+
+                self.rect = self.rect.move(5, y * (x ** 2))
+                x += 0.375
 
                 tiles_group[cur_lvl - 1].draw(screen)
                 player_group[cur_lvl - 1].draw(screen)
@@ -356,17 +369,25 @@ class Player(pygame.sprite.Sprite):
             x, y = tile * (self.x - 1) + 10, tile * (self.y * 0.55) - 40
             self.x -= 1
             screen.blit(self.image, (x, y))
+            x = 3
+            y = 0
             for i in range(16):
                 screen.blit(load_image('bg_space.jpg'), (0, -12))
                 inscriptions()
 
                 # изменяем ракурс камеры
-                camera.update(player[cur_lvl - 1])
+                camera.update(player[cur_lvl - 1], 1)
                 # обновляем положение всех спрайтов
                 for sprite in all_sprites[cur_lvl - 1]:
                     camera.apply(sprite)
 
-                self.rect = self.rect.move(-5, 0)
+                if i == 1:
+                    y = -1
+                elif i == 9:
+                    y = 1
+
+                self.rect = self.rect.move(-5, y * (x ** 2))
+                x -= 0.375
 
                 tiles_group[cur_lvl - 1].draw(screen)
                 player_group[cur_lvl - 1].draw(screen)
