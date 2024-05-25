@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import time
 import menu
 from button import ImageButton
 
@@ -289,28 +290,88 @@ class Player(pygame.sprite.Sprite):
             x, y = tile * self.x + 10, tile * ((self.y - 1) * 0.55 - 40)
             self.y -= 1
             screen.blit(self.image, (x, y))
-            self.rect = self.rect.move(0, -tile * 0.55)
+            for i in range(11):
+                screen.blit(load_image('bg_space.jpg'), (0, -12))
+                inscriptions()
+
+                # изменяем ракурс камеры
+                camera.update(player[cur_lvl - 1])
+                # обновляем положение всех спрайтов
+                for sprite in all_sprites[cur_lvl - 1]:
+                    camera.apply(sprite)
+
+                self.rect = self.rect.move(0, -4)
+
+                tiles_group[cur_lvl - 1].draw(screen)
+                player_group[cur_lvl - 1].draw(screen)
+
+                pygame.display.flip()
 
     def move_down(self):
         if can_move(self.x, self.y + 1, self.number):
             x, y = tile * self.x + 10, tile * ((self.y + 1) * 0.55 - 40)
             self.y += 1
             screen.blit(self.image, (x, y))
-            self.rect = self.rect.move(0, tile * 0.55)
+            for i in range(11):
+                screen.blit(load_image('bg_space.jpg'), (0, -12))
+                inscriptions()
+
+                # изменяем ракурс камеры
+                camera.update(player[cur_lvl - 1])
+                # обновляем положение всех спрайтов
+                for sprite in all_sprites[cur_lvl - 1]:
+                    camera.apply(sprite)
+
+                self.rect = self.rect.move(0, 4)
+
+                tiles_group[cur_lvl - 1].draw(screen)
+                player_group[cur_lvl - 1].draw(screen)
+
+                pygame.display.flip()
 
     def move_right(self):
         if can_move(self.x + 1, self.y, self.number):
             x, y = tile * (self.x + 1) + 10, tile * (self.y * 0.55) - 40
             self.x += 1
             screen.blit(self.image, (x, y))
-            self.rect = self.rect.move(tile, 0)
+            for i in range(16):
+                screen.blit(load_image('bg_space.jpg'), (0, -12))
+                inscriptions()
+
+                # изменяем ракурс камеры
+                camera.update(player[cur_lvl - 1])
+                # обновляем положение всех спрайтов
+                for sprite in all_sprites[cur_lvl - 1]:
+                    camera.apply(sprite)
+
+                self.rect = self.rect.move(5, 0)
+
+                tiles_group[cur_lvl - 1].draw(screen)
+                player_group[cur_lvl - 1].draw(screen)
+
+                pygame.display.flip()
 
     def move_left(self):
         if can_move(self.x - 1, self.y, self.number):
             x, y = tile * (self.x - 1) + 10, tile * (self.y * 0.55) - 40
             self.x -= 1
             screen.blit(self.image, (x, y))
-            self.rect = self.rect.move(-tile, 0)
+            for i in range(16):
+                screen.blit(load_image('bg_space.jpg'), (0, -12))
+                inscriptions()
+
+                # изменяем ракурс камеры
+                camera.update(player[cur_lvl - 1])
+                # обновляем положение всех спрайтов
+                for sprite in all_sprites[cur_lvl - 1]:
+                    camera.apply(sprite)
+
+                self.rect = self.rect.move(-5, 0)
+
+                tiles_group[cur_lvl - 1].draw(screen)
+                player_group[cur_lvl - 1].draw(screen)
+
+                pygame.display.flip()
 
 
 def can_move(x, y, number):
@@ -686,6 +747,9 @@ if __name__ == '__main__':
         for sprite in all_sprites[cur_lvl - 1]:
             camera.apply(sprite)
 
+        tiles_group[cur_lvl - 1].draw(screen)
+        player_group[cur_lvl - 1].draw(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -706,9 +770,6 @@ if __name__ == '__main__':
                 if event.key == pygame.K_ESCAPE:
                     menu.fade()
                     start_screen()
-
-        tiles_group[cur_lvl - 1].draw(screen)
-        player_group[cur_lvl - 1].draw(screen)
 
         pygame.display.flip()
         clock.tick(fps)
