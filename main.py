@@ -20,8 +20,6 @@ time_4 = 33
 g = []
 k = ['$', '*', '(', ')', '+']
 end = False
-camera_x = 0
-camera_y = 0
 
 
 class Camera:
